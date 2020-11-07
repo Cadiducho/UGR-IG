@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, CONO, CILINDRO, OBJETO_PLY, ROTACION, ESFERA} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -32,7 +32,8 @@ int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 _cubo cubo;
 _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
-_rotacion rotacion; 
+_rotacion rotacion, cono, cilindro; 
+_esfera esfera;
 
 // _objeto_ply *ply1;
 
@@ -108,16 +109,31 @@ glEnd();
 // Funcion que dibuja los objetos
 //****************************2***********************************************
 
-void draw_objects()
-{
-
-switch (t_objeto){
-	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-        case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
-        case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+void draw_objects() {
+	float r1 = 1.0, g1 = .0, b1 =.0, r2 = .0, g2 = 1.0, b2 = .0, grosor = 2;
+	_triangulos3D *geometria = nullptr;
+	switch (t_objeto){
+		case CUBO: {
+			geometria = &cubo; 
+			
+			break; //cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		}
+		case PIRAMIDE: {
+			geometria = &piramide;
+			break; //piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+		}
+		case OBJETO_PLY: { 
+			geometria = &ply; 
+			g2 = 0.6; b2 = 0.3;
+			break;
+		}
+		case ROTACION: geometria = &rotacion; break;
+		case CONO: geometria = &cono; break;
+		case CILINDRO: geometria = &cilindro; break;
+		case ESFERA: geometria = &esfera; break;
 	}
 
+	geometria->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 }
 
 
@@ -174,10 +190,14 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
-        case 'P':t_objeto=PIRAMIDE;break;
-        case 'C':t_objeto=CUBO;break;
-        case 'O':t_objeto=OBJETO_PLY;break;	
-        case 'R':t_objeto=ROTACION;break;
+
+    case 'P':t_objeto=PIRAMIDE;break;
+    case 'C':t_objeto=CUBO;break;
+	case 'V':t_objeto=CONO;break;
+	case 'B':t_objeto=CILINDRO;break;
+    case 'O':t_objeto=OBJETO_PLY;break;
+    case 'R':t_objeto=ROTACION;break;
+	case 'E':t_objeto=ESFERA;break;
 	}
 glutPostRedisplay();
 }
@@ -307,6 +327,9 @@ initialize();
 
 // creación del objeto ply
 ply.parametros(argv[1]);
+cono.parametros("ply/cono", 40);
+cilindro.parametros("ply/cilindro", 40);
+esfera.parametros(0.5, 40);
 
 //ply1 = new _objeto_ply(argv[1]);
 

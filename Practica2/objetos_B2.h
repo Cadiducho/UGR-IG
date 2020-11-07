@@ -10,6 +10,7 @@
 
 const float AXIS_SIZE=5000;
 typedef enum{POINTS,EDGES,SOLID_CHESS,SOLID} _modo;
+enum eje_rot{X=0,Y,Z};
 
 //*************************************************************************
 // clase punto
@@ -83,13 +84,34 @@ int   parametros(char *archivo);
 // objeto por revolución
 //************************************************************************
 
-class _rotacion: public _triangulos3D
+class _rotacion: public _objeto_ply
 {
 public:
        _rotacion();
-void  parametros(vector<_vertex3f> perfil1, int num1);
+void  parametros(
+	vector<_vertex3f> perfil1,
+	int num,
+	eje_rot eje = Y,
+	float rad=2*M_PI
+);
 
-vector<_vertex3f> perfil; 
+int   parametros(
+	char *archivo,
+	int num,
+	eje_rot eje = Y,
+	float rad=2*M_PI
+);
+
+vector<_vertex3f> perfil;
 int num;
+
+protected:
+	bool is_in_eje(_vertex3f point, eje_rot eje);
+	_vertex3f rotate_point(_vertex3f point, eje_rot eje, float theta);
 };
 
+class _esfera: public _rotacion{
+public:
+	_esfera();
+	void parametros(float r, int num, float rad=2*M_PI);
+};
