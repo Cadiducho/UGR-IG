@@ -44,10 +44,8 @@ _objeto_ply jarron;
 //
 //***************************************************************************
 
-void clean_window()
-{
-
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+void clean_window() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 
@@ -55,55 +53,49 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 // Funcion para definir la transformación de proyeccion
 //***************************************************************************
 
-void change_projection()
-{
+void change_projection() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-glMatrixMode(GL_PROJECTION);
-glLoadIdentity();
-
-// formato(x_minimo,x_maximo, y_minimo, y_maximo,plano_delantero, plano_traser)
-//  plano_delantero>0  plano_trasero>PlanoDelantero)
-glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    // formato(x_minimo,x_maximo, y_minimo, y_maximo,plano_delantero, plano_traser)
+    //  plano_delantero>0  plano_trasero>PlanoDelantero)
+    glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
 }
 
 //**************************************************************************
 // Funcion para definir la transformación*ply1 de vista (posicionar la camara)
 //***************************************************************************
 
-void change_observer()
-{
-
-// posicion del observador
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
-glTranslatef(0,0,-Observer_distance);
-glRotatef(Observer_angle_x,1,0,0);
-glRotatef(Observer_angle_y,0,1,0);
+void change_observer() {
+    // posicion del observador
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(0,0,-Observer_distance);
+    glRotatef(Observer_angle_x,1,0,0);
+    glRotatef(Observer_angle_y,0,1,0);
 }
 
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
 
-void draw_axis()
-{
-	
-glDisable(GL_LIGHTING);
-glLineWidth(2);
-glBegin(GL_LINES);
-// eje X, color rojo
-glColor3f(1,0,0);
-glVertex3f(-AXIS_SIZE,0,0);
-glVertex3f(AXIS_SIZE,0,0);
-// eje Y, color verde
-glColor3f(0,1,0);
-glVertex3f(0,-AXIS_SIZE,0);
-glVertex3f(0,AXIS_SIZE,0);
-// eje Z, color azul
-glColor3f(0,0,1);
-glVertex3f(0,0,-AXIS_SIZE);
-glVertex3f(0,0,AXIS_SIZE);
-glEnd();
+void draw_axis() {  
+    glDisable(GL_LIGHTING);
+    glLineWidth(2);
+    glBegin(GL_LINES);
+    // eje X, color rojo
+    glColor3f(1,0,0);
+    glVertex3f(-AXIS_SIZE,0,0);
+    glVertex3f(AXIS_SIZE,0,0);
+    // eje Y, color verde
+    glColor3f(0,1,0);
+    glVertex3f(0,-AXIS_SIZE,0);
+    glVertex3f(0,AXIS_SIZE,0);
+    // eje Z, color azul
+    glColor3f(0,0,1);
+    glVertex3f(0,0,-AXIS_SIZE);
+    glVertex3f(0,0,AXIS_SIZE);
+    glEnd();
 }
 
 
@@ -112,30 +104,30 @@ glEnd();
 //****************************2***********************************************
 
 void draw_objects() {
-	float r1 = 1.0, g1 = .0, b1 =.0, r2 = .0, g2 = 1.0, b2 = .0, grosor = 2;
-	_triangulos3D *geometria = nullptr;
-	switch (t_objeto){
-		case CUBO: {
-			geometria = &cubo; 
-			
-			break; //cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-		}
-		case PIRAMIDE: {
-			geometria = &piramide;
-			break; //piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-		}
-		case OBJETO_PLY: { 
-			geometria = &ply; 
-			g2 = 0.6; b2 = 0.3;
-			break;
-		}
-		case ROTACION: geometria = &rotacion; break;
-		case CONO: geometria = &cono; break;
-		case JARRON: geometria = &jarron; break;
-		case ESFERA: geometria = &esfera; break;
-	}
+    float r1 = 1.0, g1 = .0, b1 =.0, r2 = .0, g2 = 1.0, b2 = .0, grosor = 2;
+    _triangulos3D *geometria = nullptr;
+    switch (t_objeto){
+        case CUBO: {
+            geometria = &cubo; 
+            
+            break; //cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+        }
+        case PIRAMIDE: {
+            geometria = &piramide;
+            break; //piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+        }
+        case OBJETO_PLY: { 
+            geometria = &ply; 
+            g2 = 0.6; b2 = 0.3;
+            break;
+        }
+        case ROTACION: geometria = &rotacion; break;
+        case CONO: geometria = &cono; break;
+        case JARRON: geometria = &jarron; break;
+        case ESFERA: geometria = &esfera; break;
+    }
 
-	geometria->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+    geometria->draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 }
 
 
@@ -143,14 +135,12 @@ void draw_objects() {
 //
 //***************************************************************************
 
-void draw(void)
-{
-
-clean_window();
-change_observer();
-draw_axis();
-draw_objects();
-glutSwapBuffers();
+void draw(void) {
+    clean_window();
+    change_observer();
+    draw_axis();
+    draw_objects();
+    glutSwapBuffers();
 }
 
 
@@ -163,15 +153,14 @@ glutSwapBuffers();
 // nuevo alto
 //***************************************************************************
 
-void change_window_size(int Ancho1,int Alto1)
-{
-float Aspect_ratio;
+void change_window_size(int Ancho1,int Alto1) {
+    float Aspect_ratio;
 
-Aspect_ratio=(float) Alto1/(float )Ancho1;
-Size_y=Size_x*Aspect_ratio;
-change_projection();
-glViewport(0,0,Ancho1,Alto1);
-glutPostRedisplay();
+    Aspect_ratio=(float) Alto1/(float )Ancho1;
+    Size_y=Size_x*Aspect_ratio;
+    change_projection();
+    glViewport(0,0,Ancho1,Alto1);
+    glutPostRedisplay();
 }
 
 
@@ -184,24 +173,23 @@ glutPostRedisplay();
 // posicion y del raton
 //***************************************************************************
 
-void normal_key(unsigned char Tecla1,int x,int y)
-{
-switch (toupper(Tecla1)){
-	case 'Q':exit(0);
-	case '1':modo=POINTS;break;
-	case '2':modo=EDGES;break;
-	case '3':modo=SOLID;break;
-	case '4':modo=SOLID_CHESS;break;
+void normal_key(unsigned char Tecla1,int x,int y) {
+    switch (toupper(Tecla1)){
+        case 'Q':exit(0);
+        case '1':modo=POINTS;break;
+        case '2':modo=EDGES;break;
+        case '3':modo=SOLID;break;
+        case '4':modo=SOLID_CHESS;break;
 
-    case 'P':t_objeto=PIRAMIDE;break;
-    case 'C':t_objeto=CUBO;break;
-	case 'V':t_objeto=CONO;break;
-	case 'J':t_objeto=JARRON;break;
-    case 'O':t_objeto=OBJETO_PLY;break;
-    case 'R':t_objeto=ROTACION;break;
-	case 'E':t_objeto=ESFERA;break;
-	}
-glutPostRedisplay();
+        case 'P':t_objeto=PIRAMIDE;break;
+        case 'C':t_objeto=CUBO;break;
+        case 'V':t_objeto=CONO;break;
+        case 'J':t_objeto=JARRON;break;
+        case 'O':t_objeto=OBJETO_PLY;break;
+        case 'R':t_objeto=ROTACION;break;
+        case 'E':t_objeto=ESFERA;break;
+        }
+    glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -214,18 +202,16 @@ glutPostRedisplay();
 
 //***************************************************************************
 
-void special_key(int Tecla1,int x,int y)
-{
-
-switch (Tecla1){
-	case GLUT_KEY_LEFT:Observer_angle_y--;break;
-	case GLUT_KEY_RIGHT:Observer_angle_y++;break;
-	case GLUT_KEY_UP:Observer_angle_x--;break;
-	case GLUT_KEY_DOWN:Observer_angle_x++;break;
-	case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
-	case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
-	}
-glutPostRedisplay();
+void special_key(int Tecla1,int x,int y) {
+    switch (Tecla1){
+        case GLUT_KEY_LEFT:Observer_angle_y--;break;
+        case GLUT_KEY_RIGHT:Observer_angle_y++;break;
+        case GLUT_KEY_UP:Observer_angle_x--;break;
+        case GLUT_KEY_DOWN:Observer_angle_x++;break;
+        case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
+        case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+        }
+    glutPostRedisplay();
 }
 
 
@@ -234,28 +220,26 @@ glutPostRedisplay();
 // Funcion de incializacion
 //***************************************************************************
 
-void initialize(void)
-{
+void initialize(void) {
+    // se inicalizan la ventana y los planos de corte
+    Size_x=0.5;
+    Size_y=0.5;
+    Front_plane=1;
+    Back_plane=1000;
 
-// se inicalizan la ventana y los planos de corte
-Size_x=0.5;
-Size_y=0.5;
-Front_plane=1;
-Back_plane=1000;
+    // se incia la posicion del observador, en el eje z
+    Observer_distance=4*Front_plane;
+    Observer_angle_x=0;
+    Observer_angle_y=0;
 
-// se incia la posicion del observador, en el eje z
-Observer_distance=4*Front_plane;
-Observer_angle_x=0;
-Observer_angle_y=0;
+    // se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
+    // blanco=(1,1,1,1) rojo=(1,0,0,1), ...
+    glClearColor(1,1,1,1);
 
-// se indica cua*ply1l sera el color para limpiar la ventana	(r,v,a,al)
-// blanco=(1,1,1,1) rojo=(1,0,0,1), ...
-glClearColor(1,1,1,1);
-
-// se habilita el z-bufer
-glEnable(GL_DEPTH_TEST);
-change_projection();
-glViewport(0,0,Window_width,Window_high);
+    // se habilita el z-bufer
+    glEnable(GL_DEPTH_TEST);
+    change_projection();
+    glViewport(0,0,Window_width,Window_high);
 
 
 
@@ -270,86 +254,82 @@ glViewport(0,0,Window_width,Window_high);
 //***************************************************************************
 
 
-int main(int argc, char *argv[] )
-{
- 
+int main(int argc, char *argv[] ) {
+    
+    // perfil 
+
+    vector<_vertex3f> perfil2;
+    _vertex3f aux;
+
+    aux.x=1.0; aux.y=-1.0; aux.z=0.0;
+    perfil2.push_back(aux);
+    aux.x=1.0; aux.y=1.0; aux.z=0.0;
+    perfil2.push_back(aux);
 
 
+    // se llama a la inicialización de glut
+    glutInit(&argc, argv);
 
-// perfil 
+    // se indica las caracteristicas que se desean para la visualización con OpenGL
+    // Las posibilidades son:
+    // GLUT_SIMPLE -> memoria de imagen simple
+    // GLUT_DOUBLE -> memoria de imagen doble
+    // GLUT_INDEX -> memoria de imagen con color indizado
+    // GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
+    // GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
+    // GLUT_DEPTH -> memoria de profundidad o z-bufer
+    // GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-vector<_vertex3f> perfil2;
-_vertex3f aux;
+    // posicion de la esquina inferior izquierdad de la ventana
+    glutInitWindowPosition(Window_x,Window_y);
 
-aux.x=1.0; aux.y=-1.0; aux.z=0.0;
-perfil2.push_back(aux);
-aux.x=1.0; aux.y=1.0; aux.z=0.0;
-perfil2.push_back(aux);
+    // tamaño de la ventana (ancho y alto)
+    glutInitWindowSize(Window_width,Window_high);
 
+    // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
+    // al bucle de eventos)
+    glutCreateWindow("PRACTICA - 2");
 
-// se llama a la inicialización de glut
-glutInit(&argc, argv);
+    // asignación de la funcion llamada "dibujar" al evento de dibujo
+    glutDisplayFunc(draw);
+    // asignación de la funcion llamada "change_window_size" al evento correspondiente
+    glutReshapeFunc(change_window_size);
+    // asignación de la funcion llamada "normal_key" al evento correspondiente
+    glutKeyboardFunc(normal_key);
+    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
+    glutSpecialFunc(special_key);
 
-// se indica las caracteristicas que se desean para la visualización con OpenGL
-// Las posibilidades son:
-// GLUT_SIMPLE -> memoria de imagen simple
-// GLUT_DOUBLE -> memoria de imagen doble
-// GLUT_INDEX -> memoria de imagen con color indizado
-// GLUT_RGB -> memoria de imagen con componentes rojo, verde y azul para cada pixel
-// GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
-// GLUT_DEPTH -> memoria de profundidad o z-bufer
-// GLUT_STENCIL -> memoria de estarcido_rotation Rotation;
-glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    // funcion de inicialización
+    initialize();
 
-// posicion de la esquina inferior izquierdad de la ventana
-glutInitWindowPosition(Window_x,Window_y);
-
-// tamaño de la ventana (ancho y alto)
-glutInitWindowSize(Window_width,Window_high);
-
-// llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
-// al bucle de eventos)
-glutCreateWindow("PRACTICA - 2");
-
-// asignación de la funcion llamada "dibujar" al evento de dibujo
-glutDisplayFunc(draw);
-// asignación de la funcion llamada "change_window_size" al evento correspondiente
-glutReshapeFunc(change_window_size);
-// asignación de la funcion llamada "normal_key" al evento correspondiente
-glutKeyboardFunc(normal_key);
-// asignación de la funcion llamada "tecla_Especial" al evento correspondiente
-glutSpecialFunc(special_key);
-
-// funcion de inicialización
-initialize();
-
-// creación del objeto ply y otros objetos modificados
+    // creación del objeto ply y otros objetos modificados
 
 
-rotacion.parametros(perfil2,6);
-ply.parametros(argv[1]);
-esfera.parametros(0.5, 40);
-cono.parametros(10, 2.0, 2.0);
+    rotacion.parametros(perfil2,6);
+    ply.parametros(argv[1]);
+    esfera.parametros(0.5, 40);
+    cono.parametros(10, 2.0, 2.0);
 
-jarron.parametros("ply/jarron");
-jarron.figura(5);
+    jarron.parametros("ply/jarron");
+    jarron.figura(5);
 
-cout << "Ayuda: " << endl 
-<< "- Q: Salir" << endl
-<< "- 1: Modo de puntos" << endl
-<< "- 2: Modo de aristas" << endl
-<< "- 3: Modo solido" << endl
-<< "- 4: Modo ajedrez" << endl
-<< endl
-<< "- P: Ver pirámide" << endl
-<< "- C: Ver cubo" << endl
-<< "- V: Ver cono" << endl
-<< "- J: Ver jarrón" << endl
-<< "- O: Objeto ply cargado" << endl
-<< "- R: Ver objeto rotación" << endl
-<< "- E: Ver esfera" << endl;
+    cout << "Ayuda: " << endl 
+    << "- Q: Salir" << endl
+    << "- 1: Modo de puntos" << endl
+    << "- 2: Modo de aristas" << endl
+    << "- 3: Modo solido" << endl
+    << "- 4: Modo ajedrez" << endl
+    << endl
+    << "- P: Ver pirámide" << endl
+    << "- C: Ver cubo" << endl
+    << "- V: Ver cono" << endl
+    << "- J: Ver jarrón" << endl
+    << "- O: Objeto ply cargado" << endl
+    << "- R: Ver objeto rotación" << endl
+    << "- E: Ver esfera" << endl;
 
-// inicio del bucle de eventos
-glutMainLoop();
-return 0;
+    // inicio del bucle de eventos
+    glutMainLoop();
+    return 0;
 }
