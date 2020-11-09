@@ -78,6 +78,35 @@ public:
    _objeto_ply();
 
 int   parametros(char *archivo);
+void   figura(int num);
+};
+
+//************************************************************************
+// clase cono
+//************************************************************************
+
+class _cono: public _triangulos3D
+{
+public:
+       _cono();
+void  parametros(int num1, float altura, float radio);
+
+vector<_vertex3f> perfil; 
+int num;
+};
+
+//************************************************************************
+// clase cilindro
+//************************************************************************
+
+class _cilindro: public _triangulos3D
+{
+public:
+       _cilindro();
+void  parametros(int num1, float altura, float radio);
+
+vector<_vertex3f> perfil; 
+int num;
 };
 
 //************************************************************************
