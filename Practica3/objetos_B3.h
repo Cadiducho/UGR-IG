@@ -157,3 +157,35 @@ class _tanque: public _triangulos3D
         _tubo     tubo;
 };
 
+//************************************************************************
+// objeto articulado: grua/inserter
+//************************************************************************
+class _grua: public _triangulos3D {
+    private:
+        _cubo base;
+        _cubo brazo;
+        _cubo antebrazo;
+        _piramide taladro;
+
+        float angulo_base = 0;
+        float angulo_brazo = 0;
+        float angulo_antebrazo = 0;
+        float angulo_taladro = 0;
+
+        float max_brazo = 45;
+        float max_antebrazo = 35;
+
+        void drawBase(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+        void drawBrazo(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+        void drawAntebrazo(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+        void drawTaladro(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+        void drawParte(_triangulos3D& parte, _modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
+    
+    public:
+        void draw(_modo modo);
+
+        void mueveBase(float angulo);
+        void mueveBrazo(float angulo);
+        void mueveAntebrazo(float angulo);
+        void mueveTaladro(float angulo);
+};

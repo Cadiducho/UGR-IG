@@ -415,3 +415,98 @@ void _tanque::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
     glPopMatrix();
 
 };
+
+
+//************************************************************************
+// objeto articulado: grua
+//************************************************************************
+
+void _grua::mueveBase(float angulo) {
+    this->angulo_base = fmod((this->angulo_base + angulo), 360.0);
+}
+
+void _grua::mueveBrazo(float angulo) {
+    this->angulo_brazo = fmod((this->angulo_brazo + angulo), 360.0);
+}
+
+void _grua::mueveAntebrazo(float angulo) {
+    this->angulo_antebrazo = fmod((this->angulo_antebrazo + angulo), 360.0);
+}
+
+void _grua::mueveTaladro(float angulo) {
+  this->angulo_taladro = fmod((this->angulo_taladro + angulo), 360.0);
+}
+
+void _grua::drawBase(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
+    glPushMatrix();
+    glScalef(0.5, 3, 0.5);
+    glTranslatef(0, 0, 0);
+    drawParte(this->base, modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+void _grua::drawBrazo(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
+    glPushMatrix();
+    glTranslatef(-0.25, -0.25, -0.5);
+    glScalef(3, 0.5, 0.5);
+    drawParte(this->brazo, modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+void _grua::drawAntebrazo(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
+    glPushMatrix();
+    glTranslatef(-0.25, -0.25, -0.5);
+    glScalef(3, 0.5, 0.5);
+    drawParte(this->antebrazo, modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+void _grua::drawTaladro(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
+    glPushMatrix();
+    glRotatef(270, 0, 0, 1);
+    glRotatef(this->angulo_taladro, 0, 1, 0);
+    glScalef(0.35, 0.35, 0.35);
+    glTranslatef(0, 0, 0);
+    drawParte(this->taladro, modo, r1, g1, b1, r2, g2, b2, grosor);
+    glPopMatrix();
+}
+
+
+void _grua::draw(_modo modo) {
+    // Base
+    glPushMatrix();
+    glRotatef(this->angulo_base, 0, 1, 0);
+    drawBase(modo, 0.9, 0.66, 0, 0.8, 0.7, 0, 2);
+
+    {
+        // Brazo
+        glPushMatrix();
+        glTranslatef(0.25, 2.5, 1);
+        glRotatef(this->angulo_brazo, 0, 0, 1);
+        drawBrazo(modo, 0.95, 0.7, 0, 0.9, 0.65, 0, 2);
+        {
+            // Antebrazo
+            glPushMatrix();
+            glTranslatef(2.5, 0, 0.5);
+            glRotatef(this->angulo_antebrazo, 0, 0, 1);
+            drawAntebrazo(modo, 0.97, 0.5, 0, 0.85, 0.7, 0, 2);
+            glTranslatef(2.75, 0, -0.25);
+
+            drawTaladro(modo, 1, 1, 0, 0.5, 1, 0, 2);
+            glPopMatrix();
+        }
+        
+        glPopMatrix();
+    }
+    glPopMatrix();
+
+}
+
+void _grua::drawParte(_triangulos3D& parte, _modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
+    switch (modo) {
+        case POINTS: parte.draw_puntos(r1, g1, b1, grosor); break;
+        case EDGES: parte.draw_aristas(r1, g1, b1, grosor); break;
+        case SOLID_CHESS: parte.draw_solido_ajedrez(r1, g1, b1, r2, g2, b2); break;
+        case SOLID: parte.draw_solido(r1, g1, b1); break;
+  }
+}

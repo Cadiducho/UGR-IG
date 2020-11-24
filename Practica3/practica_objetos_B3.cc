@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO, GRUA} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -34,9 +34,9 @@ _piramide piramide(0.85,1.3);
 _objeto_ply  ply; 
 _rotacion rotacion; 
 _tanque tanque;
+_grua grua;
 
-// _objeto_ply *ply1;
-
+bool animando = false;
 
 //**************************************************************************
 //
@@ -111,6 +111,7 @@ void draw_objects() {
         case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
         case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
         case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
+        case GRUA: grua.draw(modo);break;
     }
 }
 
@@ -164,12 +165,13 @@ void normal_key(unsigned char Tecla1,int x,int y) {
         case '2':modo=EDGES;break;
         case '3':modo=SOLID;break;
         case '4':modo=SOLID_CHESS;break;
-        
+
         case 'P':t_objeto=PIRAMIDE;break;
         case 'C':t_objeto=CUBO;break;
         case 'O':t_objeto=OBJETO_PLY;break;	
         case 'R':t_objeto=ROTACION;break;
         case 'A':t_objeto=ARTICULADO;break;
+        case 'B':t_objeto=GRUA;break;
     }
     glutPostRedisplay();
 }
@@ -205,27 +207,75 @@ void special_key(int Tecla1,int x,int y) {
             Observer_distance/=1.2;
             break;
         case GLUT_KEY_F1:
-            tanque.giro_tubo+=1;
-            if (tanque.giro_tubo>tanque.giro_tubo_max) {
-                tanque.giro_tubo=tanque.giro_tubo_max;
+            if (t_objeto==GRUA) {
+                grua.mueveBase(3);
+            } else if (t_objeto==ARTICULADO) {
+                tanque.giro_tubo+=1;
+                if (tanque.giro_tubo>tanque.giro_tubo_max) {
+                    tanque.giro_tubo=tanque.giro_tubo_max;
+                }
             }
             break;
         case GLUT_KEY_F2:
-            tanque.giro_tubo-=1;
-            if (tanque.giro_tubo<tanque.giro_tubo_min) {
-                tanque.giro_tubo=tanque.giro_tubo_min;
+            if (t_objeto==GRUA) {
+                grua.mueveBase(-3);
+            } else if (t_objeto==ARTICULADO) {
+                tanque.giro_tubo-=1;
+                if (tanque.giro_tubo<tanque.giro_tubo_min) {
+                     tanque.giro_tubo=tanque.giro_tubo_min;
+                }
             }
             break;
         case GLUT_KEY_F3:
-            tanque.giro_torreta+=5;
+            if (t_objeto==GRUA) {
+                grua.mueveBrazo(3);
+            } else if (t_objeto==ARTICULADO) {
+                tanque.giro_torreta+=5;
+            }
             break;
         case GLUT_KEY_F4:
-            tanque.giro_torreta-=5;
+            if (t_objeto==GRUA) {
+                grua.mueveBrazo(-3);
+            } else if (t_objeto==ARTICULADO) {
+                tanque.giro_torreta-=5;
+            }
+            break;
+        case GLUT_KEY_F5:
+            if (t_objeto==GRUA) {
+                grua.mueveAntebrazo(3);
+            }
+            break;
+        case GLUT_KEY_F6:
+            if (t_objeto==GRUA) {
+                grua.mueveAntebrazo(-3);
+            }
+            break;
+        case GLUT_KEY_F7: 
+            if (t_objeto==GRUA) {
+                grua.mueveTaladro(20);
+            }
+            break;
+        case GLUT_KEY_F8: 
+            animando = !animando;
             break;
     }
     glutPostRedisplay();
 }
 
+//***************************************************************************
+// Funcion de animación
+//***************************************************************************
+
+void animacion() {
+    if (animando) {
+        grua.mueveBase(0.5);
+        grua.mueveBrazo(0.5);
+        grua.mueveAntebrazo(0.5);
+
+        grua.mueveTaladro(10);
+        glutPostRedisplay();
+    }
+}
 
 
 //***************************************************************************
@@ -334,6 +384,7 @@ int main(int argc, char **argv) {
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
     glutSpecialFunc(special_key);
 
+    glutIdleFunc(animacion);
     // funcion de inicialización
     initialize();
 
