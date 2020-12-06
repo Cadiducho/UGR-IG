@@ -13,8 +13,8 @@ using namespace std;
 
 // tipos
 typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO, GRUA} _tipo_objeto;
-_tipo_objeto t_objeto=CUBO;
-_modo   modo=POINTS;
+_tipo_objeto t_objeto=GRUA;
+_modo   modo=EDGES;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -266,13 +266,26 @@ void special_key(int Tecla1,int x,int y) {
 // Funcion de animación
 //***************************************************************************
 
+int factorBrazo = 1;
+int factorAntebrazo = 1;
+
 void animacion() {
     if (animando) {
-        grua.mueveBase(0.5);
-        grua.mueveBrazo(0.5);
-        grua.mueveAntebrazo(0.5);
+        bool muevoBrazo = grua.mueveBrazo(0.025 * factorBrazo);
+        if (!muevoBrazo) {
+            factorBrazo *= -1;
+        }
 
-        grua.mueveTaladro(10);
+        bool muevoAntebrazo = grua.mueveAntebrazo(0.05 * factorAntebrazo);
+        if (!muevoAntebrazo) {
+            factorAntebrazo *= -1;
+        }
+
+        grua.mueveBase(0.02);
+        //grua.mueveBrazo(0.5);
+        //grua.mueveAntebrazo(0.5);
+
+        grua.mueveTaladro(1);
         glutPostRedisplay();
     }
 }

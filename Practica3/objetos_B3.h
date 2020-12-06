@@ -54,7 +54,6 @@ class _cubo: public _triangulos3D
         _cubo(float tam=0.5);
 };
 
-
 //*************************************************************************
 // clase piramide
 //*************************************************************************
@@ -158,7 +157,7 @@ class _tanque: public _triangulos3D
 };
 
 //************************************************************************
-// objeto articulado: grua/inserter
+// objeto articulado: grua
 //************************************************************************
 class _grua: public _triangulos3D {
     private:
@@ -185,7 +184,7 @@ class _grua: public _triangulos3D {
         void draw(_modo modo);
 
         void mueveBase(float angulo);
-        void mueveBrazo(float angulo);
-        void mueveAntebrazo(float angulo);
+        bool mueveBrazo(float angulo);
+        bool mueveAntebrazo(float angulo);
         void mueveTaladro(float angulo);
 };

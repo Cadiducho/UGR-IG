@@ -425,12 +425,22 @@ void _grua::mueveBase(float angulo) {
     this->angulo_base = fmod((this->angulo_base + angulo), 360.0);
 }
 
-void _grua::mueveBrazo(float angulo) {
-    this->angulo_brazo = fmod((this->angulo_brazo + angulo), 360.0);
+bool _grua::mueveBrazo(float angulo) {
+    float nuevoAngulo = fmod((this->angulo_brazo + angulo), 360.0);
+    if (max_brazo > nuevoAngulo && (-max_brazo) < nuevoAngulo) {
+        this->angulo_brazo = nuevoAngulo;
+        return true;
+    }
+    return false;
 }
 
-void _grua::mueveAntebrazo(float angulo) {
-    this->angulo_antebrazo = fmod((this->angulo_antebrazo + angulo), 360.0);
+bool _grua::mueveAntebrazo(float angulo) {
+    float nuevoAngulo = fmod((this->angulo_antebrazo + angulo), 360.0);
+    if (max_antebrazo > nuevoAngulo && (-max_antebrazo) < nuevoAngulo) {
+        this->angulo_antebrazo =  nuevoAngulo;
+        return true;
+    }
+    return false;
 }
 
 void _grua::mueveTaladro(float angulo) {
@@ -448,7 +458,7 @@ void _grua::drawBase(_modo modo, float r1, float g1, float b1, float r2, float g
 void _grua::drawBrazo(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor) {
     glPushMatrix();
     glTranslatef(-0.25, -0.25, -0.5);
-    glScalef(3, 0.5, 0.5);
+    glScalef(5, 0.5, 0.5);
     drawParte(this->brazo, modo, r1, g1, b1, r2, g2, b2, grosor);
     glPopMatrix();
 }
@@ -465,8 +475,8 @@ void _grua::drawTaladro(_modo modo, float r1, float g1, float b1, float r2, floa
     glPushMatrix();
     glRotatef(270, 0, 0, 1);
     glRotatef(this->angulo_taladro, 0, 1, 0);
-    glScalef(0.35, 0.35, 0.35);
-    glTranslatef(0, 0, 0);
+    glScalef(0.75, 0.75, 0.75);
+    glTranslatef(0.25, -2, -0.10);
     drawParte(this->taladro, modo, r1, g1, b1, r2, g2, b2, grosor);
     glPopMatrix();
 }
@@ -481,7 +491,7 @@ void _grua::draw(_modo modo) {
     {
         // Brazo
         glPushMatrix();
-        glTranslatef(0.25, 2.5, 1);
+        glTranslatef(0.25, 2, 0.5);
         glRotatef(this->angulo_brazo, 0, 0, 1);
         drawBrazo(modo, 0.95, 0.7, 0, 0.9, 0.65, 0, 2);
         {
